@@ -1,0 +1,28 @@
+clients:
+  - name: #seu_nome_cliente_aqui
+    schema: #seu_schema_aqui
+    usuario: #seu_usuario_aqui
+    senha: #sua_senha_aqui
+    identificador: #seu_identificador_api_aqui (se possuir para acessar a API)
+    endpoints:
+      - endpoint: endpoint_1
+        table: # nome_tabela_banco_1 (nome em que a tabela vai receber com base no endpoint)
+
+      - endpoint: endpoint_2
+        table: # nome_tabela_banco_2 (nome em que a tabela vai receber com base no endpoint)
+
+      - endpoint: endpoint_3
+        table: # nome_tabela_banco_3 (nome em que a tabela vai receber com base no endpoint)
+
+      - endpoint: endpoint_4
+        table: # nome_tabela_banco_4 (nome em que a tabela vai receber com base no endpoint)
+
+      - endpoint: endpoint_5
+        table: # nome_tabela_banco_5 (nome em que a tabela vai receber com base no endpoint)
+
+      - endpoint: endpoint_6
+        table: # nome_tabela_banco_6 (nome em que a tabela vai receber com base no endpoint)
+
+# nesse arquivo, vc tem um modelo de como deve ser a configuração para cada cliente que deseja integrar.
+# para cada cliente, vc deve preencher as informações de nome, schema, usuario, senha e identificador (se possuir).
+# além disso, deve listar os endpoints que deseja integrar, junto com o nome da tabela correspondente

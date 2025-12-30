@@ -49,7 +49,7 @@ clients:
 
 The script runs in a continuous loop and executes a full cycle every RUN_EVERY_MINUTES.
 
-How it works
+## How it works
 
 For each configured client:
 
@@ -85,7 +85,7 @@ _fetched_at (TIMESTAMPTZ, default NOW())
 
 _endpoint (TEXT)
 
-Project structure
+## Project structure
 
 main.py: orchestration, scheduling, YAML loading, per-client/per-endpoint loop
 
@@ -107,7 +107,7 @@ All tables inside each client schema are dropped at the start of every cycle.
 
 Review this behavior before using in production environments.
 
-Learn More
+## Learn More
 
 Requests (HTTP): https://requests.readthedocs.io/
 
@@ -117,7 +117,7 @@ PostgreSQL: https://www.postgresql.org/docs/
 
 YAML: https://yaml.org/
 
-Deploy
+## Deploy
 
 You can run this as a long-running process on a server. Common options:
 

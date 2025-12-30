@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 
 import yaml
 import psycopg
-from psycopg import sql  # ✅ NOVO (para DROP SCHEMA seguro)
+from psycopg import sql 
 import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 from dotenv import load_dotenv
@@ -21,10 +21,6 @@ from pg_service import (
     drop_all_tables_in_schema,
 )
 
-
-# ----------------------------
-# Logging (TXT + rotação 10KB)
-# ----------------------------
 def setup_logger() -> logging.Logger:
     os.makedirs("log", exist_ok=True)
 
@@ -52,10 +48,6 @@ def setup_logger() -> logging.Logger:
 
     return logger
 
-
-# ----------------------------
-# Config
-# ----------------------------
 def load_clients(path: str = "clients.yml") -> List[Dict[str, Any]]:
     with open(path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
@@ -71,19 +63,12 @@ def env_bool(key: str, default: bool = False) -> bool:
         return default
     return val.strip().lower() in ("1", "true", "yes", "y", "on")
 
-
-# ----------------------------
-# 🔥 NOVO: Remove schemas órfãos
-# (schemas existentes no banco, mas que não estão mais no clients.yml)
-# ----------------------------
 def drop_orphan_schemas(conn: psycopg.Connection, keep_schemas: List[str], logger: logging.Logger) -> int:
     keep = {s.strip() for s in keep_schemas if s and str(s).strip()}
 
-    # schemas que NUNCA deve apagar
     protected = {"public", "information_schema", "pg_catalog", "pg_toast"}
     keep |= protected
 
-    # pega schemas existentes (exceto os internos pg_*)
     with conn.cursor() as cur:
         cur.execute("""
             SELECT nspname
@@ -98,7 +83,6 @@ def drop_orphan_schemas(conn: psycopg.Connection, keep_schemas: List[str], logge
         if s in keep:
             continue
 
-        # segurança extra: não remover schemas protegidos
         if s in protected:
             continue
 
@@ -113,10 +97,6 @@ def drop_orphan_schemas(conn: psycopg.Connection, keep_schemas: List[str], logge
 
     return removed
 
-
-# ----------------------------
-# Execução por ciclo
-# ----------------------------
 def run_cycle(logger: logging.Logger) -> None:
     load_dotenv()
 
@@ -136,7 +116,6 @@ def run_cycle(logger: logging.Logger) -> None:
     conninfo = pg_conninfo_from_env()
 
     with psycopg.connect(conninfo) as conn:
-        # 🔥 NOVO: sempre remove schemas que não estão mais no clients.yml
         keep = [str(c.get("schema", "")).strip() for c in clients]
         removed = drop_orphan_schemas(conn, keep, logger)
         if removed:
@@ -178,7 +157,6 @@ def run_cycle(logger: logging.Logger) -> None:
             idUsuario = auth["idUsuario"]
             ident = auth["identificador"]
 
-            # 🔥 mantém seu comportamento: derruba todas as tabelas do schema antes de recriar
             try:
                 dropped = drop_all_tables_in_schema(conn, str(schema))
                 logger.info(f"Schema {schema}: tabelas removidas={dropped}")
@@ -186,9 +164,6 @@ def run_cycle(logger: logging.Logger) -> None:
                 logger.exception(f"Falha ao dropar tabelas do schema '{schema}': {e}")
                 continue
 
-            # endpoints pode ser:
-            # - "ObterClientes"
-            # - { endpoint: "ObterClientes", table: "clientes" }
             for ep in endpoints:
                 try:
                     if isinstance(ep, str):
@@ -226,7 +201,7 @@ def run_cycle(logger: logging.Logger) -> None:
                         endpoint=str(endpoint_name),
                         rows=rows,
                         batch_size=500,
-                        recreate_table_each_run=False  # já limpamos o schema no começo
+                        recreate_table_each_run=False 
                     )
 
                     logger.info(f"Gravação COLUNAR OK | {schema}.{table} | linhas={inserted}")

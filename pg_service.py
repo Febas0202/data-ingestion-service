@@ -112,12 +112,6 @@ def drop_table_if_exists(conn: psycopg.Connection, schema: str, table: str) -> N
 
 
 def drop_all_tables_in_schema(conn: psycopg.Connection, schema: str) -> int:
-    """
-    🔥 Derruba TODAS as tabelas existentes no schema informado.
-    Isso garante que tabelas antigas (ex: clientes_mt) também sejam removidas.
-    Retorna a quantidade de tabelas removidas.
-    """
-    # lista tabelas do schema
     with conn.cursor() as cur:
         cur.execute(
             """

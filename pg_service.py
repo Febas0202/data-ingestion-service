@@ -267,4 +267,6 @@ def insert_rows_batch(
 
 # nesse arquivo pg_service.py você tem funções auxiliares para interagir com o PostgreSQL,
 # como criar schemas, criar tabelas, adicionar colunas, inserir dados em lotes e inferir tipos de dados.
-# essas funções são usadas no main.py para gerenciar o banco de dados onde os dados da API serão armazenados.        
+# essas funções são usadas no main.py para gerenciar o banco de dados onde os dados da API serão armazenados.   
+#PG_HOST, PG_PORT, PG_DB, PG_USER, PG_PASSWORD essas variáveis vc pode criar no seu .env, precisa armazenar esses nomes, mas vc pode alterar se quiser. 
+#O PG_HOST e PG_PORT já são listados no código, vc pode apenas listar PG_DB, PG_USER, PG_PASSWORD no seu .env.
